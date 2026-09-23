@@ -1,0 +1,1327 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>iOS Interview Prep — Roadmap</title>
+<meta name="description" content="Senior iOS interview prep roadmap and daily to-do tracker.">
+<meta name="theme-color" content="#0d1117">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="iOS Prep">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%230d1117'/><path d='M18 34 l9 9 l19-22' fill='none' stroke='%2338c793' stroke-width='7' stroke-linecap='round' stroke-linejoin='round'/></svg>">
+</head>
+<body>
+<div id="app"></div>
+<style>
+  #app, #app * { box-sizing: border-box; font-family: 'SF Pro Text', -apple-system, 'Segoe UI', system-ui, sans-serif; }
+  #app {
+    --bg: #0d1117;
+    --panel: #141b24;
+    --card: #1a2230;
+    --card-border: #2a3444;
+    --text: #e6edf3;
+    --muted: #8b96a5;
+    --line: #3a4556;
+    --accent-dsa: #c86dd7;
+    --accent-swift: #ff8a5c;
+    --accent-swiftui: #4da8ff;
+    --accent-arch: #38c793;
+    --accent-sysdes: #ffd166;
+    --accent-behav: #ff6b8a;
+    --accent-mock: #9aa5ff;
+    --accent-network: #14b8a6;
+    --accent-uikit: #f59e0b;
+    --accent-persist: #65a30d;
+    --accent-concur: #8b5cf6;
+    --accent-perf: #ec4899;
+    --accent-lifecycle: #0ea5e9;
+    --accent-security: #ef4444;
+    --accent-a11y: #06b6d4;
+    --accent-applebank: #a1a1aa;
+    --accent-combine: #d946ef;
+    --accent-deeplink: #fb923c;
+    --accent-hardware: #22c55e;
+    --accent-cicd: #64748b;
+    --accent-blind75: #a3e635;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 24px;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; }
+
+  /* Header + overall progress */
+  .hdr { margin-bottom: 8px; }
+  .hdr h1 { font-size: 23px; margin:0 0 4px; font-weight:700; letter-spacing:-0.02em; }
+  .hdr .sub { color:var(--muted); font-size:13px; }
+  .overall {
+    display:flex; align-items:center; gap:14px;
+    background:var(--panel); border:1px solid var(--card-border);
+    border-radius:14px; padding:14px 18px; margin:16px 0 2px;
+  }
+  .overall .bar { flex:1; height:9px; background:#0f151d; border-radius:99px; overflow:hidden; }
+  .overall .bar > span { display:block; height:100%; border-radius:99px;
+    background:linear-gradient(90deg,#4da8ff,#38c793); transition:width .45s ease; }
+  .overall .lbl { font-size:12.5px; color:var(--muted); white-space:nowrap; font-variant-numeric:tabular-nums; font-weight:600; }
+
+  /* Quick-jump phase chips */
+  .chips { display:flex; gap:8px; flex-wrap:wrap; margin:14px 0 24px; }
+  .chip {
+    display:inline-flex; align-items:center; gap:8px; cursor:pointer; font:inherit;
+    background:var(--card); border:1px solid var(--card-border); color:var(--text);
+    border-radius:99px; padding:7px 13px; font-size:12px; font-weight:600;
+    transition:border-color .12s, background .12s, transform .1s;
+  }
+  .chip:hover { background:#1f2939; border-color:var(--line); transform:translateY(-1px); }
+  .chip .dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+  .chip .cc { color:var(--muted); font-weight:500; font-variant-numeric:tabular-nums; }
+
+  /* Data (backup) actions */
+  .data-actions { display:flex; gap:8px; margin:10px 0 0; flex-wrap:wrap; align-items:center; }
+  .mini-btn { display:inline-flex; align-items:center; gap:6px; cursor:pointer; font:inherit;
+    background:var(--card); border:1px solid var(--card-border); color:var(--text);
+    border-radius:8px; padding:6px 11px; font-size:12px; font-weight:600;
+    transition:border-color .12s, background .12s; }
+  .mini-btn:hover { background:#1f2939; border-color:var(--line); }
+  .data-actions .hint { color:var(--muted); font-size:11px; margin-left:2px; }
+
+  /* Cloud sync */
+  .sync-status { font-size:11px; padding:2px 9px; border-radius:99px; border:1px solid var(--card-border); color:var(--muted); white-space:nowrap; }
+  .sync-status.ok { color:#38c793; border-color:#2f6f57; }
+  .sync-status.syncing { color:#ffd166; border-color:#7a6a2f; }
+  .sync-status.error { color:#ff6b8a; border-color:#7a3a48; }
+  .sync-panel { margin:12px 0 0; padding:14px 16px; background:var(--card); border:1px solid var(--card-border); border-radius:12px; }
+  .sync-panel[hidden] { display:none; }
+  .sync-row { display:flex; flex-direction:column; gap:5px; margin-bottom:11px; }
+  .sync-row.inline { flex-direction:row; align-items:center; gap:8px; }
+  .sync-row label { font-size:11px; color:var(--muted); font-weight:600; }
+  .sync-panel input { background:#0f151d; color:var(--text); border:1px solid var(--card-border);
+    border-radius:8px; padding:8px 10px; font-size:13px; font-family:inherit; width:100%; }
+  .sync-panel input:focus { outline:none; border-color:#4da8ff; }
+  .sync-row.inline input { flex:1; }
+  .sync-actions { display:flex; gap:8px; flex-wrap:wrap; margin-top:4px; }
+  .sync-help { font-size:11px; color:var(--muted); line-height:1.6; margin-top:12px; }
+  .sync-help code { background:#0f151d; border:1px solid var(--card-border); border-radius:4px; padding:0 4px; }
+  .sync-help a { color:#4da8ff; }
+
+  /* Phase section */
+  .phase { margin-bottom:28px; scroll-margin-top:12px; }
+  .phase-bar { display:flex; align-items:baseline; gap:10px; margin:0 0 8px; padding:0 2px; flex-wrap:wrap; }
+  .phase-bar h2 { font-size:12.5px; font-weight:700; text-transform:uppercase; letter-spacing:.09em; margin:0; }
+  .phase-bar .wk { color:var(--muted); font-size:12px; font-weight:400; }
+  .phase-bar .pc { margin-left:auto; color:var(--muted); font-size:12px; font-variant-numeric:tabular-nums; }
+  .phase-line { height:1px; background:var(--card-border); margin-bottom:10px; }
+
+  /* Track — collapsible accordion */
+  .track {
+    background:var(--card); border:1px solid var(--card-border);
+    border-left:3px solid var(--track-color, var(--line));
+    border-radius:11px; margin-bottom:8px; overflow:hidden;
+    transition:border-color .12s, box-shadow .15s;
+  }
+  .track.open { box-shadow:0 6px 22px rgba(0,0,0,.30); }
+  .track-head {
+    display:flex; align-items:center; gap:12px; width:100%;
+    background:none; border:none; color:var(--text); font:inherit;
+    padding:13px 15px; cursor:pointer; text-align:left;
+  }
+  .track-head:hover { background:#1f2939; }
+  .track-head .chev { flex-shrink:0; color:var(--muted); font-size:10px; width:12px;
+    display:inline-block; transition:transform .2s ease; }
+  .track.open .track-head .chev { transform:rotate(90deg); color:var(--track-color); }
+  .track-head .tname { font-size:14px; font-weight:600; flex:1; }
+  .track-head .tprog { display:flex; align-items:center; gap:9px; flex-shrink:0; }
+  .track-head .mini { width:64px; height:5px; background:#0f151d; border-radius:99px; overflow:hidden; }
+  .track-head .mini > span { display:block; height:100%; background:var(--track-color); border-radius:99px; transition:width .3s ease; }
+  .track-head .cnt { font-size:11px; color:var(--muted); min-width:36px; text-align:right; font-variant-numeric:tabular-nums; }
+
+  /* Accordion body — animated via grid-template-rows */
+  .track-body { display:grid; grid-template-rows:0fr; transition:grid-template-rows .26s ease; }
+  .track.open .track-body { grid-template-rows:1fr; }
+  .track-body > .inner { overflow:hidden; }
+  .body-pad { padding:2px 16px 12px 30px; }
+  .track-actions { display:flex; justify-content:flex-end; margin-bottom:2px; }
+  .reset-btn { font-size:11px; color:var(--muted); background:none; border:1px solid var(--card-border);
+    border-radius:6px; padding:3px 9px; cursor:pointer; }
+  .reset-btn:hover { color:var(--text); border-color:var(--line); }
+
+  /* Task rows */
+  .task-row { padding:8px 0; border-bottom:1px solid #232c3a; }
+  .task-row:last-child { border-bottom:none; }
+  .task-main { display:flex; align-items:flex-start; gap:11px; }
+  .task-row input[type=checkbox] { margin-top:1px; width:17px; height:17px;
+    accent-color:var(--track-color, #4da8ff); cursor:pointer; flex-shrink:0; }
+  .task-label { font-size:13px; line-height:1.45; flex:1; }
+  .task-label.done { color:var(--muted); text-decoration:line-through; }
+  .task-tag { font-size:9.5px; padding:1px 6px; border-radius:10px; margin-left:6px;
+    border:1px solid var(--card-border); color:var(--muted); white-space:nowrap; }
+  .note-toggle { flex-shrink:0; background:none; border:1px solid var(--card-border); color:var(--muted);
+    border-radius:6px; font-size:11px; padding:2px 8px; cursor:pointer; line-height:1.5; }
+  .note-toggle.has-note { color:var(--track-color); border-color:var(--track-color); }
+  .note-toggle:hover { color:var(--text); }
+  .note-box { margin:8px 0 0 28px; display:none; }
+  .note-box.open { display:block; }
+  .note-box textarea { width:100%; min-height:54px; resize:vertical; background:#0f151d; color:var(--text);
+    border:1px solid var(--card-border); border-radius:6px; padding:8px; font-size:12.5px;
+    font-family:inherit; line-height:1.4; }
+  .note-box textarea:focus { outline:none; border-color:var(--track-color); }
+  .note-saved { font-size:10px; color:var(--muted); margin-top:3px; opacity:0; transition:opacity .3s; }
+  .note-saved.show { opacity:1; }
+
+  /* Personal to-do list */
+  .todos { background:var(--panel); border:1px solid var(--card-border);
+    border-radius:14px; padding:16px 18px; margin:0 0 26px; }
+  .todos-head { display:flex; align-items:baseline; gap:10px; margin-bottom:12px; flex-wrap:wrap; }
+  .todos-head h2 { font-size:14px; font-weight:700; margin:0; letter-spacing:-0.01em; }
+  .todos-head .date { color:var(--muted); font-size:12px; }
+  .todos-head .open-cnt { margin-left:auto; color:var(--muted); font-size:12px; font-variant-numeric:tabular-nums; }
+  .todo-add { display:flex; gap:8px; margin-bottom:12px; }
+  .todo-add input { flex:1; background:#0f151d; color:var(--text); border:1px solid var(--card-border);
+    border-radius:8px; padding:9px 12px; font-size:13px; font-family:inherit; }
+  .todo-add input:focus { outline:none; border-color:#4da8ff; }
+  .todo-add button { background:#4da8ff; color:#08121f; border:none; border-radius:8px; padding:0 16px;
+    font-size:13px; font-weight:600; cursor:pointer; font-family:inherit; }
+  .todo-add button:hover { background:#6fb8ff; }
+  .todo-list { display:flex; flex-direction:column; }
+  .todo-day { margin-top:4px; }
+  .todo-day:first-child { margin-top:0; }
+  .todo-day-head { display:flex; align-items:baseline; gap:8px; padding:9px 0 3px;
+    font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.07em; color:var(--muted); }
+  .todo-day-head.today { color:#4da8ff; }
+  .todo-day-cnt { font-weight:500; letter-spacing:0; text-transform:none; font-size:11px; color:var(--muted); }
+  .todo-item { display:flex; align-items:flex-start; gap:11px; padding:7px 0; border-bottom:1px solid #232c3a; }
+  .todo-day .todo-item:last-child { border-bottom:none; }
+  .todo-item input[type=checkbox] { margin-top:1px; width:17px; height:17px; accent-color:#38c793; cursor:pointer; flex-shrink:0; }
+  .todo-item .txt { flex:1; font-size:13px; line-height:1.45; word-break:break-word; }
+  .todo-item.done .txt { color:var(--muted); text-decoration:line-through; }
+  .todo-del { flex-shrink:0; background:none; border:none; color:var(--muted); cursor:pointer;
+    font-size:17px; line-height:1; padding:0 4px; border-radius:6px; }
+  .todo-del:hover { color:#ff6b8a; background:#231820; }
+  .todos-empty { color:var(--muted); font-size:12.5px; padding:6px 0; }
+  .todos-foot { display:flex; justify-content:flex-end; margin-top:10px; }
+  .clear-done { font-size:11px; color:var(--muted); background:none; border:1px solid var(--card-border);
+    border-radius:6px; padding:3px 9px; cursor:pointer; }
+  .clear-done:hover { color:var(--text); border-color:var(--line); }
+
+  @media (max-width: 560px) {
+    #app { padding:16px 12px; }
+    .track-head .mini { width:46px; }
+    .track-head .tname { font-size:13.5px; }
+    .body-pad { padding-left:20px; }
+  }
+</style>
+<script>
+(function(){
+  const DATA = [
+    { phase: "Blind 75", weeks: "Do this first — the core 75", tracks: [
+      { id:"b75-arrays", name:"Arrays & Hashing", color:"var(--accent-blind75)", tasks:[
+        {t:"217. Contains Duplicate (Easy)", tag:"Blind 75"},
+        {t:"242. Valid Anagram (Easy)", tag:"Blind 75"},
+        {t:"1. Two Sum (Easy)", tag:"Blind 75"},
+        {t:"49. Group Anagrams (Med)", tag:"Blind 75"},
+        {t:"347. Top K Frequent Elements (Med)", tag:"Blind 75"},
+        {t:"238. Product of Array Except Self (Med)", tag:"Blind 75"},
+        {t:"271. Encode and Decode Strings (Med)", tag:"Blind 75"},
+        {t:"128. Longest Consecutive Sequence (Med)", tag:"Blind 75"},
+      ]},
+      { id:"b75-twoptr", name:"Two Pointers", color:"var(--accent-blind75)", tasks:[
+        {t:"125. Valid Palindrome (Easy)", tag:"Blind 75"},
+        {t:"15. 3Sum (Med)", tag:"Blind 75"},
+        {t:"11. Container With Most Water (Med)", tag:"Blind 75"},
+      ]},
+      { id:"b75-sliding", name:"Sliding Window", color:"var(--accent-blind75)", tasks:[
+        {t:"121. Best Time to Buy and Sell Stock (Easy)", tag:"Blind 75"},
+        {t:"3. Longest Substring Without Repeating Characters (Med)", tag:"Blind 75"},
+        {t:"424. Longest Repeating Character Replacement (Med)", tag:"Blind 75"},
+        {t:"76. Minimum Window Substring (Hard)", tag:"Blind 75"},
+      ]},
+      { id:"b75-stack", name:"Stack", color:"var(--accent-blind75)", tasks:[
+        {t:"20. Valid Parentheses (Easy)", tag:"Blind 75"},
+      ]},
+      { id:"b75-binsearch", name:"Binary Search", color:"var(--accent-blind75)", tasks:[
+        {t:"153. Find Minimum in Rotated Sorted Array (Med)", tag:"Blind 75"},
+        {t:"33. Search in Rotated Sorted Array (Med)", tag:"Blind 75"},
+      ]},
+      { id:"b75-linkedlist", name:"Linked List", color:"var(--accent-blind75)", tasks:[
+        {t:"206. Reverse Linked List (Easy)", tag:"Blind 75"},
+        {t:"21. Merge Two Sorted Lists (Easy)", tag:"Blind 75"},
+        {t:"143. Reorder List (Med)", tag:"Blind 75"},
+        {t:"19. Remove Nth Node From End of List (Med)", tag:"Blind 75"},
+        {t:"141. Linked List Cycle (Easy)", tag:"Blind 75"},
+        {t:"23. Merge k Sorted Lists (Hard)", tag:"Blind 75"},
+      ]},
+      { id:"b75-trees", name:"Trees", color:"var(--accent-blind75)", tasks:[
+        {t:"226. Invert Binary Tree (Easy)", tag:"Blind 75"},
+        {t:"104. Maximum Depth of Binary Tree (Easy)", tag:"Blind 75"},
+        {t:"100. Same Tree (Easy)", tag:"Blind 75"},
+        {t:"572. Subtree of Another Tree (Easy)", tag:"Blind 75"},
+        {t:"235. Lowest Common Ancestor of a BST (Med)", tag:"Blind 75"},
+        {t:"102. Binary Tree Level Order Traversal (Med)", tag:"Blind 75"},
+        {t:"98. Validate Binary Search Tree (Med)", tag:"Blind 75"},
+        {t:"230. Kth Smallest Element in a BST (Med)", tag:"Blind 75"},
+        {t:"105. Construct Binary Tree from Preorder and Inorder Traversal (Med)", tag:"Blind 75"},
+        {t:"124. Binary Tree Maximum Path Sum (Hard)", tag:"Blind 75"},
+        {t:"297. Serialize and Deserialize Binary Tree (Hard)", tag:"Blind 75"},
+      ]},
+      { id:"b75-tries", name:"Tries", color:"var(--accent-blind75)", tasks:[
+        {t:"208. Implement Trie (Prefix Tree) (Med)", tag:"Blind 75"},
+        {t:"211. Design Add and Search Words Data Structure (Med)", tag:"Blind 75"},
+        {t:"212. Word Search II (Hard)", tag:"Blind 75"},
+      ]},
+      { id:"b75-heap", name:"Heap / Priority Queue", color:"var(--accent-blind75)", tasks:[
+        {t:"295. Find Median from Data Stream (Hard)", tag:"Blind 75"},
+      ]},
+      { id:"b75-backtrack", name:"Backtracking", color:"var(--accent-blind75)", tasks:[
+        {t:"39. Combination Sum (Med)", tag:"Blind 75"},
+        {t:"79. Word Search (Med)", tag:"Blind 75"},
+      ]},
+      { id:"b75-graphs", name:"Graphs", color:"var(--accent-blind75)", tasks:[
+        {t:"200. Number of Islands (Med)", tag:"Blind 75"},
+        {t:"133. Clone Graph (Med)", tag:"Blind 75"},
+        {t:"417. Pacific Atlantic Water Flow (Med)", tag:"Blind 75"},
+        {t:"207. Course Schedule (Med)", tag:"Blind 75"},
+        {t:"261. Graph Valid Tree (Med)", tag:"Blind 75"},
+        {t:"323. Number of Connected Components in an Undirected Graph (Med)", tag:"Blind 75"},
+      ]},
+      { id:"b75-advgraphs", name:"Advanced Graphs", color:"var(--accent-blind75)", tasks:[
+        {t:"269. Alien Dictionary (Hard)", tag:"Blind 75"},
+      ]},
+      { id:"b75-dp1d", name:"1-D Dynamic Programming", color:"var(--accent-blind75)", tasks:[
+        {t:"70. Climbing Stairs (Easy)", tag:"Blind 75"},
+        {t:"198. House Robber (Med)", tag:"Blind 75"},
+        {t:"213. House Robber II (Med)", tag:"Blind 75"},
+        {t:"5. Longest Palindromic Substring (Med)", tag:"Blind 75"},
+        {t:"647. Palindromic Substrings (Med)", tag:"Blind 75"},
+        {t:"91. Decode Ways (Med)", tag:"Blind 75"},
+        {t:"322. Coin Change (Med)", tag:"Blind 75"},
+        {t:"152. Maximum Product Subarray (Med)", tag:"Blind 75"},
+        {t:"139. Word Break (Med)", tag:"Blind 75"},
+        {t:"300. Longest Increasing Subsequence (Med)", tag:"Blind 75"},
+      ]},
+      { id:"b75-dp2d", name:"2-D Dynamic Programming", color:"var(--accent-blind75)", tasks:[
+        {t:"62. Unique Paths (Med)", tag:"Blind 75"},
+        {t:"1143. Longest Common Subsequence (Med)", tag:"Blind 75"},
+      ]},
+      { id:"b75-greedy", name:"Greedy", color:"var(--accent-blind75)", tasks:[
+        {t:"53. Maximum Subarray (Med)", tag:"Blind 75"},
+        {t:"55. Jump Game (Med)", tag:"Blind 75"},
+      ]},
+      { id:"b75-intervals", name:"Intervals", color:"var(--accent-blind75)", tasks:[
+        {t:"57. Insert Interval (Med)", tag:"Blind 75"},
+        {t:"56. Merge Intervals (Med)", tag:"Blind 75"},
+        {t:"435. Non-overlapping Intervals (Med)", tag:"Blind 75"},
+        {t:"252. Meeting Rooms (Easy)", tag:"Blind 75"},
+        {t:"253. Meeting Rooms II (Med)", tag:"Blind 75"},
+      ]},
+      { id:"b75-math", name:"Math & Geometry", color:"var(--accent-blind75)", tasks:[
+        {t:"48. Rotate Image (Med)", tag:"Blind 75"},
+        {t:"54. Spiral Matrix (Med)", tag:"Blind 75"},
+        {t:"73. Set Matrix Zeroes (Med)", tag:"Blind 75"},
+      ]},
+      { id:"b75-bit", name:"Bit Manipulation", color:"var(--accent-blind75)", tasks:[
+        {t:"191. Number of 1 Bits (Easy)", tag:"Blind 75"},
+        {t:"338. Counting Bits (Easy)", tag:"Blind 75"},
+        {t:"190. Reverse Bits (Easy)", tag:"Blind 75"},
+        {t:"268. Missing Number (Easy)", tag:"Blind 75"},
+        {t:"371. Sum of Two Integers (Med)", tag:"Blind 75"},
+      ]},
+    ]},
+    { phase: "Foundation", weeks: "Weeks 1-4", tracks: [
+      { id:"f-dsa", name:"DSA Patterns I", color:"var(--accent-dsa)", tasks:[
+        {t:"Two Pointers — 2 problems, timed 25min", tag:"DSA"},
+        {t:"Sliding Window — 2 problems", tag:"DSA"},
+        {t:"Fast/Slow Pointers — 2 problems", tag:"DSA"},
+        {t:"Binary Search variants — 3 problems", tag:"DSA"},
+        {t:"BFS/DFS on Trees — 3 problems", tag:"DSA"},
+        {t:"BFS/DFS on Graphs — 3 problems", tag:"DSA"},
+        {t:"Backtracking basics — 2 problems", tag:"DSA"},
+        {t:"Mixed timed review set — 4 problems, no hints", tag:"DSA"},
+      ]},
+      { id:"f-swift", name:"Swift Language Fundamentals", color:"var(--accent-swift)", tasks:[
+        {t:"Value vs. reference types & copy-on-write — build a demo showing COW behavior on a struct vs class", tag:"Swift"},
+        {t:"Protocols & generics — implement a small generic, protocol-based cache", tag:"Swift"},
+        {t:"Enums with associated values & pattern matching — model a network response state machine", tag:"Swift"},
+        {t:"Error handling — contrast throws, Result, and throwing async functions with a real example", tag:"Swift"},
+        {t:"Access control & module boundaries — review a package's public API surface, tighten it", tag:"Swift"},
+        {t:"Optionals — if let, guard let, and optional chaining: rewrite a force-unwrap-heavy snippet safely", tag:"Swift"},
+        {t:"Properties deep dive — computed properties, property observers (willSet/didSet), lazy, type (static) properties", tag:"Swift"},
+        {t:"Opaque types (some) vs. boxed protocol/existential types (any) — when each is the right call", tag:"Swift"},
+        {t:"Types of initializers — designated vs. convenience vs. required, and initializer delegation", tag:"Swift"},
+        {t:"Objective-C vs. Swift — interop considerations and migration trade-offs (tie to your QVC/Ford ObjC→Swift work)", tag:"Swift"},
+        {t:"Imperative vs. declarative programming — frame UIKit vs. SwiftUI through this lens", tag:"Swift"},
+        {t:"Array vs. Set — ordering/duplicates vs. uniqueness, O(n) vs. O(1) lookup, Hashable requirement", tag:"Swift"},
+        {t:"Nil-coalescing operator (??) — as an alternative to verbose optional-unwrap branching", tag:"Swift"},
+        {t:"Escaping vs. non-escaping closures & capture lists — when @escaping is required, weak/unowned in capture lists", tag:"Swift"},
+        {t:"Higher-order functions — map, filter, reduce, compactMap, flatMap: rewrite an imperative loop using them", tag:"Swift"},
+        {t:"Autoclosures — what problem @autoclosure solves (e.g. assert/||) and how it differs from a normal closure param", tag:"Swift"},
+        {t:"Associated types in protocols vs. generics — when a protocol with an associated type is the right tool over a generic function", tag:"Swift"},
+        {t:"Write your own one-page cheat sheet on the above, in your words", tag:"Swift"},
+      ]},
+      { id:"f-swiftui", name:"SwiftUI/UIKit Core", color:"var(--accent-swiftui)", tasks:[
+        {t:"Build Screen 1 — justify @State vs @Binding vs @StateObject vs @ObservedObject vs @EnvironmentObject out loud for every property", tag:"SwiftUI"},
+        {t:"Build Screen 2 — parent/child view pair with @StateObject owner + @ObservedObject child; break it once on purpose and explain the bug", tag:"SwiftUI"},
+        {t:"Build Screen 3 — app-wide setting via @EnvironmentObject, contrast with @Binding", tag:"SwiftUI"},
+        {t:"Design prompt: 'offline note-taking flow' — whiteboard domain model + state machine before any View code", tag:"SwiftUI"},
+        {t:"Design prompt: 'media upload queue' — same discipline, business logic first", tag:"SwiftUI"},
+        {t:"Swift concurrency refresh — actors, structured concurrency, Task cancellation: write 3 snippets from memory", tag:"Concurrency"},
+        {t:"Memory management — find and fix a retain cycle in a closure-heavy sample", tag:"Memory"},
+        {t:"strong vs. weak vs. unowned — trade-offs (optional vs. non-optional, reference-count impact) with a concrete example of each", tag:"Memory"},
+        {t:"Manual Reference Counting (MRC) — historical context for legacy Objective-C code you might still touch", tag:"Memory"},
+        {t:"Autorelease pool — what autoreleasepool blocks do and when you'd use one to control peak memory", tag:"Memory"},
+      ]},
+      { id:"f-sysdes", name:"System Design Orientation", color:"var(--accent-sysdes)", tasks:[
+        {t:"Skim breakdown: 'design Instagram's feed'", tag:"Read"},
+        {t:"Skim breakdown: 'design a photo backup app'", tag:"Read"},
+        {t:"Note the shape of the round: requirements → data model → sync → edge cases → trade-offs", tag:"Notes"},
+      ]},
+      { id:"f-behav", name:"Behavioral Brain-dump", color:"var(--accent-behav)", tasks:[
+        {t:"List 8-10 candidate stories from your resume, one line each", tag:"Behavioral"},
+        {t:"Tag each story with likely themes (ambiguity, cross-team influence, ownership, conflict)", tag:"Behavioral"},
+        {t:"Draft 3 stories into full STAR format", tag:"Behavioral"},
+        {t:"Draft 3 more stories into full STAR format", tag:"Behavioral"},
+        {t:"Finish remaining STAR drafts", tag:"Behavioral"},
+      ]},
+      { id:"f-network", name:"Networking Layer", color:"var(--accent-network)", tasks:[
+        {t:"URLSession fundamentals — sessions, tasks, caching policies", tag:"Networking"},
+        {t:"Alamofire vs. URLSession trade-offs — tie to your QVC Order Management System work", tag:"Networking"},
+        {t:"REST vs. GraphQL trade-offs — tie to your Social Share GraphQL migration", tag:"Networking"},
+        {t:"Retry/backoff & error handling strategies for flaky networks", tag:"Networking"},
+        {t:"Write a short note: how you'd design a resilient network layer for offline-first use", tag:"Networking"},
+        {t:"Offline sync & conflict resolution — timestamp-based strategies for reconciling local vs. server state", tag:"Networking"},
+        {t:"Pagination trigger hooks — willDisplay cell callbacks in UIKit vs. LazyVStack's onAppear in SwiftUI", tag:"Networking"},
+      ]},
+      { id:"f-uikit", name:"UIKit Fundamentals", color:"var(--accent-uikit)", tasks:[
+        {t:"View controller lifecycle — explain each callback's purpose (viewDidLoad → viewDidAppear, etc.)", tag:"UIKit"},
+        {t:"Auto Layout — constraints vs. manual frames, intrinsic content size", tag:"UIKit"},
+        {t:"UICollectionView diffable data sources — snapshot-based updates", tag:"UIKit"},
+        {t:"UIKit ↔ SwiftUI interop — UIViewRepresentable, UIHostingController (tie to your QVC migration work)", tag:"UIKit"},
+        {t:"Storyboards vs. XIBs vs. Programmatic UI — trade-offs for each, and when you'd pick one", tag:"UIKit"},
+        {t:"Content Hugging & Compression Resistance priorities — resolve an ambiguous-layout scenario using them", tag:"UIKit"},
+        {t:"UINavigationController & UITabBarController — hierarchical vs. tabbed navigation, segue types (push/modal)", tag:"UIKit"},
+        {t:"UITableView vs. UICollectionView — key differences and when each is the right choice", tag:"UIKit"},
+        {t:"Event handling & the responder chain — how touches propagate and hit-testing works", tag:"UIKit"},
+        {t:"Size classes & adaptive layout (traits) — designing one layout that adapts across devices", tag:"UIKit"},
+        {t:"Frame vs. Bounds — parent coordinate space vs. a view's own internal coordinate system", tag:"UIKit"},
+      ]},
+    ]},
+    { phase: "Depth", weeks: "Weeks 5-8", tracks: [
+      { id:"d-dsa", name:"DSA Patterns II", color:"var(--accent-dsa)", tasks:[
+        {t:"Dynamic Programming — basic 1D problems", tag:"DSA"},
+        {t:"Dynamic Programming — basic 2D problems", tag:"DSA"},
+        {t:"Heaps / Priority Queues", tag:"DSA"},
+        {t:"Trie problems", tag:"DSA"},
+        {t:"Union-Find problems", tag:"DSA"},
+        {t:"Intervals problems", tag:"DSA"},
+        {t:"1 ambiguous/messy-requirements problem per week", tag:"DSA"},
+      ]},
+      { id:"d-arch", name:"Design Patterns & Architecture", color:"var(--accent-arch)", tasks:[
+        {t:"MVVM vs. VIPER vs. TCA-style unidirectional flow — write the trade-offs, not just definitions", tag:"Architecture"},
+        {t:"Protocol-oriented design — refactor a class hierarchy into protocol + composition", tag:"Architecture"},
+        {t:"Dependency Injection patterns — constructor vs. property vs. environment injection (tie to your Ford Cleanse Framework work)", tag:"Architecture"},
+        {t:"Delegate vs. closure-based callbacks — when each is the right call", tag:"Architecture"},
+        {t:"Singleton pitfalls & testable alternatives", tag:"Architecture"},
+        {t:"SOLID principles — apply each letter to a real Swift refactor, not just definitions", tag:"Architecture"},
+        {t:"Dependency managers — Swift Package Manager vs. CocoaPods vs. Carthage trade-offs", tag:"Architecture"},
+        {t:"MVC vs. Observer pattern — where classic MVC breaks down in iOS and how Observer fills the gap", tag:"Architecture"},
+        {t:"Factory pattern — abstracting object creation, with a concrete Swift example", tag:"Architecture"},
+        {t:"Coordinator pattern — decoupling navigation logic from view controllers/views", tag:"Architecture"},
+      ]},
+      { id:"d-combine", name:"Combine & State Management", color:"var(--accent-combine)", tasks:[
+        {t:"Combine basics — Publishers and Subscribers, the subscription lifecycle", tag:"Combine"},
+        {t:"PassthroughSubject vs. CurrentValueSubject — when to use which", tag:"Combine"},
+        {t:"Common operators — map, filter, combineLatest, catch: build a small chain end-to-end", tag:"Combine"},
+        {t:"Memory management in Combine — cancellables, avoiding retain cycles in sink closures", tag:"Combine"},
+        {t:"NotificationCenter — posting/observing, and its trade-offs vs. Combine", tag:"Combine"},
+        {t:"Key-Value Observing (KVO) — when it's still the right tool vs. Combine/delegation", tag:"Combine"},
+        {t:"Combine vs. traditional approaches — write a short comparison (delegation, NotificationCenter, KVO, Combine) and when you'd reach for each", tag:"Combine"},
+        {t:"MVVM data flow — how state flows View ↔ ViewModel using the above tools", tag:"Combine"},
+      ]},
+      { id:"d-swiftui", name:"SwiftUI Performance & Testing", color:"var(--accent-swiftui)", tasks:[
+        {t:"View identity & diffing — how SwiftUI decides to re-render", tag:"SwiftUI"},
+        {t:"@ViewBuilder pitfalls", tag:"SwiftUI"},
+        {t:"Contrast with UIKit's manual invalidation model (ties to your QVC migration work)", tag:"SwiftUI"},
+        {t:"Testing strategy — structure Unit + UI tests for a feature with async state", tag:"Testing"},
+        {t:"TDD vs. BDD — how each shapes the way you write a feature, with an example from your own workflow", tag:"Testing"},
+        {t:"Quick/Nimble — how BDD-style testing frameworks differ from raw XCTest", tag:"Testing"},
+        {t:"Mocking network layers — protocol-based mocking for URLSession-backed code under test", tag:"Testing"},
+        {t:"View Hierarchy Debugger — using it to catch a layout/alignment bug", tag:"Testing"},
+        {t:"Core LLDB commands — po, breakpoints, expression evaluation — enough to debug live in an interview", tag:"Testing"},
+      ]},
+      { id:"d-sysdes", name:"System Design Practice", color:"var(--accent-sysdes)", tasks:[
+        {t:"Week 5: Design a photo backup/sync app (offline-first, conflict resolution)", tag:"System Design"},
+        {t:"Week 6: Design a chat feature with offline queueing & delivery guarantees", tag:"System Design"},
+        {t:"Week 7: Design a push-notification feature under battery/network constraints", tag:"System Design"},
+        {t:"Week 8: Design a caching + pagination strategy for a content feed", tag:"System Design"},
+      ]},
+      { id:"d-behav", name:"Behavioral STAR Polish", color:"var(--accent-behav)", tasks:[
+        {t:"Convert full story list into 90-second spoken STAR narratives", tag:"Behavioral"},
+        {t:"Prioritize: ownership under ambiguity, cross-team influence, production incidents, driving process change", tag:"Behavioral"},
+      ]},
+      { id:"d-mock", name:"Weekly Mock Interviews", color:"var(--accent-mock)", tasks:[
+        {t:"Week 5 mock — DSA round", tag:"Mock"},
+        {t:"Week 6 mock — iOS Technical round", tag:"Mock"},
+        {t:"Week 7 mock — System Design round", tag:"Mock"},
+        {t:"Week 8 mock — Behavioral round", tag:"Mock"},
+      ]},
+      { id:"d-persist", name:"Persistence", color:"var(--accent-persist)", tasks:[
+        {t:"Core Data fundamentals — NSManagedObject, contexts, fetch requests", tag:"Persistence"},
+        {t:"Core Data migrations — lightweight vs. manual", tag:"Persistence"},
+        {t:"Realm vs. SQLite vs. Core Data — trade-offs write-up", tag:"Persistence"},
+        {t:"Design a local cache/persistence layer for an offline-first feature", tag:"Persistence"},
+        {t:"UserDefaults — right use cases (lightweight settings/preferences) and where it's misused for app state", tag:"Persistence"},
+        {t:"NSCache — in-memory caching trade-offs vs. a hand-rolled dictionary cache", tag:"Persistence"},
+        {t:"SwiftData vs. Core Data — what's different, and when you'd reach for each today", tag:"Persistence"},
+      ]},
+      { id:"d-concur", name:"Concurrency Deep Dive", color:"var(--accent-concur)", tasks:[
+        {t:"GCD vs. async/await — when you'd still reach for GCD", tag:"Concurrency"},
+        {t:"Race conditions & thread safety — build a data race example, fix it with an actor", tag:"Concurrency"},
+        {t:"@MainActor — where it's required, common pitfalls", tag:"Concurrency"},
+        {t:"Structured concurrency error propagation — child task cancellation/throwing", tag:"Concurrency"},
+        {t:"GCD deep dive — serial vs. concurrent queues, Dispatch Groups, Dispatch Semaphores for shared-resource access", tag:"Concurrency"},
+        {t:"Operation & OperationQueue — custom operations, dependencies between operations, cancellation", tag:"Concurrency"},
+        {t:"Sendable protocol — what makes a type safely shareable across concurrency domains", tag:"Concurrency"},
+        {t:"Dispatch queue types — Main queue (UI-bound), Global queues partitioned by QoS class, and custom queues: when each is right", tag:"Concurrency"},
+        {t:"Thread Sanitizer (TSan) — using it to catch a data race you couldn't spot by reading code", tag:"Concurrency"},
+        {t:"Locks & barriers — NSLock, pthread_mutex, and dispatch barriers as alternatives to actors", tag:"Concurrency"},
+        {t:"Deadlocks — the classic circular-wait-on-serial-queue scenario, and how to avoid it", tag:"Concurrency"},
+        {t:"DispatchWorkItem — cancellation semantics, and how it differs from cancelling a Task", tag:"Concurrency"},
+        {t:"DispatchQueue vs. OperationQueue — explicit trade-off write-up (pause/resume/cancel control, built-in dependencies)", tag:"Concurrency"},
+      ]},
+      { id:"d-perf", name:"Performance & Profiling", color:"var(--accent-perf)", tasks:[
+        {t:"Instruments — Time Profiler, Allocations, Leaks: know what each finds", tag:"Performance"},
+        {t:"App launch time — cold vs. warm start, common bottlenecks", tag:"Performance"},
+        {t:"Memory graph debugger — spot a retain cycle visually", tag:"Performance"},
+        {t:"Turn your Dynatrace/Instruments crash-rate work (QVC 96%→99.8%) into a spoken technical narrative", tag:"Performance"},
+      ]},
+      { id:"d-lifecycle", name:"App Lifecycle & Background Execution", color:"var(--accent-lifecycle)", tasks:[
+        {t:"App/Scene lifecycle — foreground/background/suspended transitions", tag:"Lifecycle"},
+        {t:"Background fetch & background tasks (BGTaskScheduler)", tag:"Lifecycle"},
+        {t:"State restoration", tag:"Lifecycle"},
+        {t:"Push notification handling while backgrounded — tie to your Sparky/UEP work", tag:"Lifecycle"},
+      ]},
+      { id:"d-uikitvis", name:"UIKit Visuals & Interaction", color:"var(--accent-uikit)", tasks:[
+        {t:"Core Animation basics — CALayer vs. UIView, implicit vs. explicit animations", tag:"UIKit"},
+        {t:"UIKit animation APIs — UIView.animate, keyframe animations, spring animations", tag:"UIKit"},
+        {t:"Gesture recognizers — built-in types (tap, pan, pinch, swipe) and writing a custom one", tag:"UIKit"},
+        {t:"Managing complex view hierarchies — performance cost of deep hierarchies, flattening strategies", tag:"UIKit"},
+        {t:"Performance optimization & memory management specific to UIKit view rendering", tag:"UIKit"},
+      ]},
+      { id:"d-deeplink", name:"Deep Linking & Platform Conventions", color:"var(--accent-deeplink)", tasks:[
+        {t:"URL scheme deep linking vs. Universal Links — trade-offs (tie to your Social Share deeplink removal work)", tag:"Platform"},
+        {t:"APNs deep dive — payload types, silent push, registration/token lifecycle", tag:"Platform"},
+        {t:"Apple Human Interface Guidelines (HIG) — key principles interviewers expect a Senior candidate to reason about", tag:"Platform"},
+        {t:"GraphQL fundamentals — schema, queries vs. mutations (tie to your Social Share GraphQL migration)", tag:"Platform"},
+      ]},
+      { id:"d-hardware", name:"Specialized Hardware Frameworks", color:"var(--accent-hardware)", tasks:[
+        {t:"MapKit & CoreLocation — annotations, region monitoring, accuracy/battery trade-offs (tie to your Ford off-road nav work)", tag:"Hardware"},
+        {t:"CoreBluetooth — Central vs. Peripheral roles, connection lifecycle basics", tag:"Hardware"},
+        {t:"AVFoundation — media streaming/playback fundamentals (tie to your QVC video player work)", tag:"Hardware"},
+      ]},
+      { id:"d-cicd", name:"CI/CD & Release Engineering", color:"var(--accent-cicd)", tasks:[
+        {t:"Provisioning Profiles & Distribution Certificates — what they are and why builds fail without them", tag:"CI/CD"},
+        {t:"Jenkins & Fastlane pipelines — stages of an automated build/release pipeline (tie to your Ford CI/CD work)", tag:"CI/CD"},
+        {t:"Crash diagnostics tooling — Dynatrace/Bugsee-style production crash triage (tie to your QVC crash-rate work)", tag:"CI/CD"},
+      ]},
+    ]},
+    { phase: "Integration", weeks: "Weeks 9-12", tracks: [
+      { id:"i-dsa", name:"DSA Timed Mixed Sets", color:"var(--accent-dsa)", tasks:[
+        {t:"Timed mixed set — category unknown in advance", tag:"DSA"},
+        {t:"Revisit anything shaky from Weeks 1-8 mocks", tag:"DSA"},
+      ]},
+      { id:"i-tech", name:"Rapid-Fire Technical Drills", color:"var(--accent-swift)", tasks:[
+        {t:"Rapid drills: property wrappers, concurrency, memory management — 60-90s answers", tag:"Swift/SwiftUI"},
+        {t:"Rapid drills: Swift language (protocols, generics, enums, error handling)", tag:"Swift"},
+        {t:"Rapid drills: architecture trade-offs (MVVM/VIPER/TCA, DI)", tag:"Architecture"},
+        {t:"Redo a Week 3-4 'business logic first' design prompt cold — confirm the habit stuck", tag:"SwiftUI"},
+      ]},
+      { id:"i-sysdes", name:"System Design — Harder Prompts", color:"var(--accent-sysdes)", tasks:[
+        {t:"Design the App Store's update/download queue", tag:"System Design"},
+        {t:"Design a cross-device sync system like Handoff", tag:"System Design"},
+      ]},
+      { id:"i-behav", name:"Behavioral Final Polish", color:"var(--accent-behav)", tasks:[
+        {t:"Tighten remaining weak stories", tag:"Behavioral"},
+        {t:"Prep 2-3 conflict/disagreement stories specifically", tag:"Behavioral"},
+        {t:"Prepare thoughtful questions to ask interviewers", tag:"Behavioral"},
+      ]},
+      { id:"i-mock", name:"Full-Loop Simulations", color:"var(--accent-mock)", tasks:[
+        {t:"Full loop in miniature — DSA + System Design + Behavioral, one sitting", tag:"Mock"},
+        {t:"Repeat full-loop mock two weeks later", tag:"Mock"},
+        {t:"Final week: last full-loop mock, then taper — light review only", tag:"Mock"},
+      ]},
+      { id:"i-security", name:"Security Basics", color:"var(--accent-security)", tasks:[
+        {t:"Keychain — when/why to use it over UserDefaults", tag:"Security"},
+        {t:"App Transport Security (ATS) — exceptions and when they're justified", tag:"Security"},
+        {t:"Certificate pinning — trade-offs", tag:"Security"},
+        {t:"Encryption basics — symmetric vs. asymmetric, at-rest vs. in-transit", tag:"Security"},
+        {t:"Two-factor authentication — flow considerations from a client app's perspective", tag:"Security"},
+        {t:"Jailbreak detection — common techniques and their limits", tag:"Security"},
+        {t:"Rapid-fire: explain each of the above in under 60 seconds", tag:"Security"},
+      ]},
+      { id:"i-a11y", name:"Accessibility Internals", color:"var(--accent-a11y)", tasks:[
+        {t:"VoiceOver — accessibility labels, traits, hints", tag:"Accessibility"},
+        {t:"Dynamic Type support", tag:"Accessibility"},
+        {t:"Accessibility tree & how it maps to UIKit/SwiftUI views", tag:"Accessibility"},
+        {t:"Turn your Walmart accessibility standards work into a technical explanation, not just a resume bullet", tag:"Accessibility"},
+      ]},
+    ]},
+    { phase: "Apple Question Bank", weeks: "Ongoing — pull from here throughout", tracks: [
+      { id:"bank-arrays", name:"Arrays & Hashing", color:"var(--accent-applebank)", tasks:[
+        {t:"1. Two Sum (Easy)", tag:"Apple"},
+        {t:"49. Group Anagrams (Med)", tag:"Apple"},
+        {t:"238. Product of Array Except Self (Med)", tag:"Apple"},
+        {t:"242. Valid Anagram (Easy)", tag:"Apple"},
+        {t:"560. Subarray Sum Equals K (Med)", tag:"Apple"},
+        {t:"347. Top K Frequent Elements (Med)", tag:"Apple"},
+        {t:"189. Rotate Array (Med)", tag:"Apple"},
+        {t:"283. Move Zeroes (Easy)", tag:"Apple"},
+        {t:"53. Maximum Subarray (Med)", tag:"Apple"},
+        {t:"56. Merge Intervals (Med)", tag:"Apple"},
+        {t:"253. Meeting Rooms II (Med)", tag:"Apple"},
+        {t:"2970. Count the Number of Incremovable Subarrays I (Easy)", tag:"Apple"},
+        {t:"2972. Count the Number of Incremovable Subarrays II (Hard)", tag:"Apple"},
+        {t:"565. Array Nesting (Med)", tag:"Apple"},
+        {t:"1275. Find Winner on a Tic Tac Toe Game (Easy)", tag:"Apple"},
+        {t:"2397. Maximum Rows Covered by Columns (Med)", tag:"Apple"},
+        {t:"3030. Find the Grid of Region Average (Med)", tag:"Apple"},
+        {t:"2023. Number of Pairs of Strings With Concatenation Equal to Target (Med)", tag:"Apple"},
+        {t:"3074. Apple Redistribution into Boxes (Easy)", tag:"Apple"},
+        {t:"628. Maximum Product of Three Numbers (Easy)", tag:"Apple"},
+        {t:"118. Pascal's Triangle (Easy)", tag:"Apple"},
+        {t:"48. Rotate Image (Med)", tag:"Apple"},
+        {t:"54. Spiral Matrix (Med)", tag:"Apple"},
+        {t:"383. Ransom Note (Easy)", tag:"Apple"},
+        {t:"191. Number of 1 Bits (Easy)", tag:"Apple"},
+        {t:"190. Reverse Bits (Easy)", tag:"Apple"},
+        {t:"69. Sqrt(x) (Easy)", tag:"Apple"},
+        {t:"121. Best Time to Buy and Sell Stock (Easy)", tag:"Apple"},
+        {t:"122. Best Time to Buy and Sell Stock II (Med)", tag:"Apple"},
+        {t:"443. String Compression (Med)", tag:"Apple"},
+      ]},
+      { id:"bank-twoptr", name:"Two Pointers & Sliding Window", color:"var(--accent-applebank)", tasks:[
+        {t:"3. Longest Substring Without Repeating Characters (Med)", tag:"Apple"},
+        {t:"15. 3Sum (Med)", tag:"Apple"},
+        {t:"26. Remove Duplicates from Sorted Array (Easy)", tag:"Apple"},
+        {t:"80. Remove Duplicates from Sorted Array II (Med)", tag:"Apple"},
+        {t:"27. Remove Element (Easy)", tag:"Apple"},
+        {t:"88. Merge Sorted Array (Easy)", tag:"Apple"},
+        {t:"125. Valid Palindrome (Easy)", tag:"Apple"},
+        {t:"167. Two Sum II - Input Array Is Sorted (Med)", tag:"Apple"},
+        {t:"344. Reverse String (Easy)", tag:"Apple"},
+        {t:"239. Sliding Window Maximum (Hard)", tag:"Apple"},
+        {t:"55. Jump Game (Med)", tag:"Apple"},
+        {t:"45. Jump Game II (Med)", tag:"Apple"},
+        {t:"42. Trapping Rain Water (Hard)", tag:"Apple"},
+        {t:"658. Find K Closest Elements (Med)", tag:"Apple"},
+      ]},
+      { id:"bank-binsearch", name:"Binary Search", color:"var(--accent-applebank)", tasks:[
+        {t:"4. Median of Two Sorted Arrays (Hard)", tag:"Apple"},
+        {t:"33. Search in Rotated Sorted Array (Med)", tag:"Apple"},
+        {t:"153. Find Minimum in Rotated Sorted Array (Med)", tag:"Apple"},
+        {t:"1011. Capacity To Ship Packages Within D Days (Med)", tag:"Apple"},
+        {t:"240. Search a 2D Matrix II (Med)", tag:"Apple"},
+        {t:"378. Kth Smallest Element in a Sorted Matrix (Med)", tag:"Apple"},
+      ]},
+      { id:"bank-linkedlist", name:"Linked List", color:"var(--accent-applebank)", tasks:[
+        {t:"21. Merge Two Sorted Lists (Easy)", tag:"Apple"},
+        {t:"23. Merge k Sorted Lists (Hard)", tag:"Apple"},
+        {t:"92. Reverse Linked List II (Med)", tag:"Apple"},
+        {t:"206. Reverse Linked List (Easy)", tag:"Apple"},
+        {t:"19. Remove Nth Node From End of List (Med)", tag:"Apple"},
+        {t:"237. Delete Node in a Linked List (Med)", tag:"Apple"},
+      ]},
+      { id:"bank-trees", name:"Trees & Graphs (BFS/DFS)", color:"var(--accent-applebank)", tasks:[
+        {t:"102. Binary Tree Level Order Traversal (Med)", tag:"Apple"},
+        {t:"104. Maximum Depth of Binary Tree (Easy)", tag:"Apple"},
+        {t:"236. Lowest Common Ancestor of a Binary Tree (Med)", tag:"Apple"},
+        {t:"1650. Lowest Common Ancestor of a Binary Tree III (Med)", tag:"Apple"},
+        {t:"257. Binary Tree Paths (Easy)", tag:"Apple"},
+        {t:"124. Binary Tree Maximum Path Sum (Hard)", tag:"Apple"},
+        {t:"200. Number of Islands (Med)", tag:"Apple"},
+        {t:"207. Course Schedule (Med)", tag:"Apple"},
+        {t:"210. Course Schedule II (Med)", tag:"Apple"},
+        {t:"127. Word Ladder (Hard)", tag:"Apple"},
+      ]},
+      { id:"bank-backtrack", name:"Backtracking", color:"var(--accent-applebank)", tasks:[
+        {t:"22. Generate Parentheses (Med)", tag:"Apple"},
+        {t:"46. Permutations (Med)", tag:"Apple"},
+        {t:"291. Word Pattern II (Med)", tag:"Apple"},
+        {t:"36. Valid Sudoku (Med)", tag:"Apple"},
+      ]},
+      { id:"bank-dp", name:"Dynamic Programming", color:"var(--accent-applebank)", tasks:[
+        {t:"70. Climbing Stairs (Easy)", tag:"Apple"},
+        {t:"213. House Robber II (Med)", tag:"Apple"},
+        {t:"322. Coin Change (Med)", tag:"Apple"},
+        {t:"91. Decode Ways (Med)", tag:"Apple"},
+        {t:"97. Interleaving String (Med)", tag:"Apple"},
+        {t:"221. Maximal Square (Med)", tag:"Apple"},
+        {t:"688. Knight Probability in Chessboard (Med)", tag:"Apple"},
+        {t:"996. Number of Squareful Arrays (Hard)", tag:"Apple"},
+      ]},
+      { id:"bank-heap", name:"Heap, Stack & Design", color:"var(--accent-applebank)", tasks:[
+        {t:"146. LRU Cache (Med)", tag:"Apple"},
+        {t:"622. Design Circular Queue (Med)", tag:"Apple"},
+        {t:"348. Design Tic-Tac-Toe (Med)", tag:"Apple"},
+        {t:"295. Find Median from Data Stream (Hard)", tag:"Apple"},
+        {t:"895. Maximum Frequency Stack (Hard)", tag:"Apple"},
+        {t:"284. Peeking Iterator (Med)", tag:"Apple"},
+        {t:"215. Kth Largest Element in an Array (Med)", tag:"Apple"},
+        {t:"208. Implement Trie (Prefix Tree) (Med)", tag:"Apple"},
+        {t:"1352. Product of the Last K Numbers (Med)", tag:"Apple"},
+        {t:"1146. Snapshot Array (Med)", tag:"Apple"},
+        {t:"362. Design Hit Counter (Med)", tag:"Apple"},
+        {t:"706. Design HashMap (Easy)", tag:"Apple"},
+        {t:"907. Sum of Subarray Minimums (Med)", tag:"Apple"},
+        {t:"503. Next Greater Element II (Med)", tag:"Apple"},
+        {t:"218. The Skyline Problem (Hard)", tag:"Apple"},
+        {t:"759. Employee Free Time (Hard)", tag:"Apple"},
+      ]},
+      { id:"bank-strings", name:"Strings, Math & Concurrency", color:"var(--accent-applebank)", tasks:[
+        {t:"5. Longest Palindromic Substring (Med)", tag:"Apple"},
+        {t:"7. Reverse Integer (Med)", tag:"Apple"},
+        {t:"10. Regular Expression Matching (Hard)", tag:"Apple"},
+        {t:"14. Longest Common Prefix (Easy)", tag:"Apple"},
+        {t:"20. Valid Parentheses (Easy)", tag:"Apple"},
+        {t:"67. Add Binary (Easy)", tag:"Apple"},
+        {t:"68. Text Justification (Hard)", tag:"Apple"},
+        {t:"71. Simplify Path (Med)", tag:"Apple"},
+        {t:"151. Reverse Words in a String (Med)", tag:"Apple"},
+        {t:"165. Compare Version Numbers (Med)", tag:"Apple"},
+        {t:"227. Basic Calculator II (Med)", tag:"Apple"},
+        {t:"273. Integer to English Words (Hard)", tag:"Apple"},
+        {t:"28. Find the Index of the First Occurrence in a String (Easy)", tag:"Apple"},
+        {t:"394. Decode String (Med)", tag:"Apple"},
+        {t:"509. Fibonacci Number (Easy)", tag:"Apple"},
+        {t:"149. Max Points on a Line (Hard)", tag:"Apple"},
+        {t:"839. Similar String Groups (Hard)", tag:"Apple"},
+        {t:"493. Reverse Pairs (Hard)", tag:"Apple"},
+        {t:"1242. Web Crawler Multithreaded (Med)", tag:"Apple"},
+      ]},
+    ]},
+  ];
+
+  const expanded = new Set(); // ids of tracks currently expanded
+  let state = {}; // { [trackId]: { done:[bool...], notes:[string...] } }
+  let todos = []; // personal to-dos: [{ id, text, done, ts }]
+  let sync = { token: '', gistId: '', lastSynced: 0, status: 'off', statusMsg: '' }; // device-local only
+  let applyingRemote = false; // true while writing a pulled/imported payload (suppresses push)
+  let syncTimer = null;
+  let syncPanelOpen = false;
+  const root = document.getElementById('app');
+
+  const hasClaudeStorage = typeof window.storage !== 'undefined' && window.storage && typeof window.storage.get === 'function';
+  const LS_PREFIX = 'ios-interview-roadmap:';
+
+  const storage = {
+    async get(key) {
+      if (hasClaudeStorage) {
+        try { return await window.storage.get(key); }
+        catch (e) { /* fall through to localStorage as backup */ }
+      }
+      try {
+        const raw = localStorage.getItem(LS_PREFIX + key);
+        return raw === null ? null : { key, value: raw };
+      } catch (e) { return null; }
+    },
+    async set(key, value) {
+      if (hasClaudeStorage) {
+        try { return await window.storage.set(key, value); }
+        catch (e) { /* fall through to localStorage as backup */ }
+      }
+      try { localStorage.setItem(LS_PREFIX + key, value); return { key, value }; }
+      catch (e) { return null; }
+    }
+  };
+
+  function allTracks() {
+    return DATA.flatMap(p => p.tracks.map(t => ({...t, phase:p.phase, weeks:p.weeks})));
+  }
+
+  async function loadState(track) {
+    if (state[track.id]) return state[track.id];
+    let s;
+    try {
+      const res = await storage.get('progress:' + track.id);
+      s = res ? JSON.parse(res.value) : null;
+    } catch (e) { s = null; }
+    if (!s || !Array.isArray(s.done)) {
+      s = { done: new Array(track.tasks.length).fill(false), notes: new Array(track.tasks.length).fill('') };
+    }
+    // backfill in case task count changed
+    while (s.done.length < track.tasks.length) s.done.push(false);
+    while (s.notes.length < track.tasks.length) s.notes.push('');
+    state[track.id] = s;
+    return s;
+  }
+
+  async function saveState(trackId, s) {
+    state[trackId] = s;
+    try { await storage.set('progress:' + trackId, JSON.stringify(s)); } catch(e) {}
+    if (!applyingRemote) scheduleSync();
+  }
+
+  function countDone(arr) { return arr.filter(Boolean).length; }
+
+  const saveTimers = {};
+
+  function trackById(id) { return allTracks().find(t => t.id === id); }
+
+  function renderTaskRow(tr, task, i, s) {
+    const hasNote = !!(s.notes[i] && s.notes[i].trim());
+    return `
+      <div class="task-row">
+        <div class="task-main">
+          <input type="checkbox" ${s.done[i] ? 'checked' : ''} data-tid="${tr.id}" data-idx="${i}">
+          <div class="task-label ${s.done[i] ? 'done' : ''}">${task.t}<span class="task-tag">${task.tag}</span></div>
+          <button class="note-toggle ${hasNote ? 'has-note' : ''}" data-tid="${tr.id}" data-idx="${i}">${hasNote ? '📝 Note' : '+ Note'}</button>
+        </div>
+        <div class="note-box ${hasNote ? 'open' : ''}" data-note-box="${tr.id}-${i}">
+          <textarea placeholder="Add a note for this task…" data-tid="${tr.id}" data-idx="${i}">${s.notes[i] || ''}</textarea>
+          <div class="note-saved" data-saved="${tr.id}-${i}">Saved</div>
+        </div>
+      </div>`;
+  }
+
+  function renderTrack(tr) {
+    const s = state[tr.id];
+    const isOpen = expanded.has(tr.id);
+    return `
+      <div class="track ${isOpen ? 'open' : ''}" data-id="${tr.id}" style="--track-color:${tr.color}">
+        <button class="track-head" data-toggle="${tr.id}" aria-expanded="${isOpen}">
+          <span class="chev">▶</span>
+          <span class="tname">${tr.name}</span>
+          <span class="tprog">
+            <span class="mini" data-mini="${tr.id}"><span style="width:0%"></span></span>
+            <span class="cnt">0/${tr.tasks.length}</span>
+          </span>
+        </button>
+        <div class="track-body">
+          <div class="inner">
+            <div class="body-pad">
+              <div class="track-actions"><button class="reset-btn" data-reset="${tr.id}">Reset track</button></div>
+              ${tr.tasks.map((task, i) => renderTaskRow(tr, task, i, s)).join('')}
+            </div>
+          </div>
+        </div>
+      </div>`;
+  }
+
+  function render() {
+    const header = `
+      <div class="hdr">
+        <h1>Senior iOS Interview Prep — Roadmap</h1>
+        <div class="sub">Tap any track to expand its checklist. Progress saves automatically.</div>
+        <div class="overall">
+          <div class="bar"><span id="overall-fill" style="width:0%"></span></div>
+          <div class="lbl" id="overall-label">0 / 0 done</div>
+        </div>
+        <div class="chips">
+          ${DATA.map((p, pi) => `
+            <button class="chip" data-jump="${pi}">
+              <span class="dot" style="background:${p.tracks[0] ? p.tracks[0].color : 'var(--line)'}"></span>
+              ${p.phase}
+              <span class="cc" data-chip-count="${pi}">0/0</span>
+            </button>`).join('')}
+        </div>
+        <div class="data-actions">
+          <button class="mini-btn" id="export-btn" title="Download a JSON backup of all progress, notes, and to-dos">⤓ Export backup</button>
+          <button class="mini-btn" id="import-btn" title="Load a JSON backup from another device">⤒ Import</button>
+          <input id="import-file" type="file" accept="application/json,.json" hidden>
+          <button class="mini-btn" id="sync-btn" title="Set up automatic sync across devices via a private GitHub Gist">☁ Sync</button>
+          <span class="sync-status off" id="sync-status">Off</span>
+        </div>
+        <div class="sync-panel" id="sync-panel" ${syncPanelOpen ? '' : 'hidden'}>
+          <div class="sync-row">
+            <label for="sync-token">GitHub token (gist scope)</label>
+            <input id="sync-token" type="password" autocomplete="off" placeholder="${sync.token ? '•••••••• saved on this device' : 'ghp_… (stored only in this browser)'}">
+          </div>
+          <div class="sync-row inline">
+            <input id="sync-gist" type="text" autocomplete="off" placeholder="Gist ID (paste existing, or create one →)" value="${sync.gistId || ''}">
+            <button class="mini-btn" id="sync-create">Create gist</button>
+          </div>
+          <div class="sync-actions">
+            <button class="mini-btn" id="sync-connect">Connect &amp; pull</button>
+            <button class="mini-btn" id="sync-now">Sync now</button>
+            <button class="mini-btn" id="sync-disconnect">Disconnect</button>
+          </div>
+          <div class="sync-help">
+            Your token is saved <b>only in this browser</b> — never in the page, the gist, or your export file. It syncs to a <b>private</b> gist.<br>
+            Create one at <a href="https://github.com/settings/tokens" target="_blank" rel="noopener">github.com/settings/tokens</a> → "Tokens (classic)" → check only the <code>gist</code> scope. Then on each device: paste the token, and use the <b>same</b> Gist ID.
+          </div>
+        </div>
+      </div>`;
+
+    const todoDate = new Date().toLocaleDateString(undefined, { weekday: 'long', month: 'short', day: 'numeric' });
+    const todoPanel = `
+      <div class="todos">
+        <div class="todos-head">
+          <h2>Personal To-Dos</h2>
+          <span class="date">${todoDate}</span>
+          <span class="open-cnt" id="todo-open">0 open</span>
+        </div>
+        <form class="todo-add" id="todo-form">
+          <input id="todo-input" type="text" placeholder="Add a personal task (project, errand, idea)…" autocomplete="off">
+          <button type="submit">Add</button>
+        </form>
+        <div class="todo-list" id="todo-list"></div>
+        <div class="todos-foot"><button class="clear-done" id="todo-clear">Clear completed</button></div>
+      </div>`;
+
+    const phases = DATA.map((phase, pi) => `
+      <section class="phase" id="phase-${pi}">
+        <div class="phase-bar">
+          <h2>${phase.phase}</h2>
+          <span class="wk">${phase.weeks}</span>
+          <span class="pc" data-phase-count="${pi}">0/0</span>
+        </div>
+        <div class="phase-line"></div>
+        ${phase.tracks.map(tr => renderTrack(tr)).join('')}
+      </section>`).join('');
+
+    root.innerHTML = `<div class="wrap">${header}${todoPanel}${phases}</div>`;
+    attachListeners();
+    renderTodos();
+    refreshProgress();
+  }
+
+  function refreshProgress() {
+    let allDone = 0, allTotal = 0;
+    DATA.forEach((phase, pi) => {
+      let pd = 0, pt = 0;
+      phase.tracks.forEach(tr => {
+        const s = state[tr.id];
+        const d = countDone(s.done), t = tr.tasks.length;
+        pd += d; pt += t;
+        const mini = root.querySelector(`[data-mini="${tr.id}"]`);
+        if (mini) {
+          mini.firstElementChild.style.width = (t ? d / t * 100 : 0) + '%';
+          const cnt = mini.parentElement.querySelector('.cnt');
+          if (cnt) cnt.textContent = `${d}/${t}`;
+        }
+      });
+      allDone += pd; allTotal += pt;
+      const pc = root.querySelector(`[data-phase-count="${pi}"]`); if (pc) pc.textContent = `${pd}/${pt}`;
+      const cc = root.querySelector(`[data-chip-count="${pi}"]`); if (cc) cc.textContent = `${pd}/${pt}`;
+    });
+    const of = root.querySelector('#overall-fill'); if (of) of.style.width = (allTotal ? allDone / allTotal * 100 : 0) + '%';
+    const ol = root.querySelector('#overall-label'); if (ol) ol.textContent = `${allDone} / ${allTotal} done`;
+  }
+
+  function attachListeners() {
+    // Expand / collapse a track
+    root.querySelectorAll('[data-toggle]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.getAttribute('data-toggle');
+        const track = btn.closest('.track');
+        const nowOpen = track.classList.toggle('open');
+        btn.setAttribute('aria-expanded', nowOpen);
+        if (nowOpen) expanded.add(id); else expanded.delete(id);
+      });
+    });
+
+    // Quick-jump chips
+    root.querySelectorAll('[data-jump]').forEach(chip => {
+      chip.addEventListener('click', () => {
+        const el = document.getElementById('phase-' + chip.getAttribute('data-jump'));
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+
+    // Checkboxes
+    root.querySelectorAll('.task-row input[type=checkbox]').forEach(cb => {
+      cb.addEventListener('change', async () => {
+        const id = cb.getAttribute('data-tid');
+        const idx = parseInt(cb.getAttribute('data-idx'));
+        const s = state[id];
+        s.done[idx] = cb.checked;
+        cb.nextElementSibling.classList.toggle('done', cb.checked);
+        refreshProgress();
+        await saveState(id, s);
+      });
+    });
+
+    // Note toggles
+    root.querySelectorAll('.note-toggle').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.getAttribute('data-tid');
+        const idx = btn.getAttribute('data-idx');
+        const box = root.querySelector(`[data-note-box="${id}-${idx}"]`);
+        box.classList.toggle('open');
+        if (box.classList.contains('open')) box.querySelector('textarea').focus();
+      });
+    });
+
+    // Note textareas (debounced autosave)
+    root.querySelectorAll('.note-box textarea').forEach(ta => {
+      ta.addEventListener('input', () => {
+        const id = ta.getAttribute('data-tid');
+        const idx = parseInt(ta.getAttribute('data-idx'));
+        const s = state[id];
+        s.notes[idx] = ta.value;
+        const btn = root.querySelector(`.note-toggle[data-tid="${id}"][data-idx="${idx}"]`);
+        btn.classList.toggle('has-note', !!ta.value.trim());
+        btn.textContent = ta.value.trim() ? '📝 Note' : '+ Note';
+        const key = id + '-' + idx;
+        clearTimeout(saveTimers[key]);
+        saveTimers[key] = setTimeout(async () => {
+          await saveState(id, s);
+          const savedEl = root.querySelector(`[data-saved="${id}-${idx}"]`);
+          if (savedEl) { savedEl.classList.add('show'); setTimeout(() => savedEl.classList.remove('show'), 1200); }
+        }, 500);
+      });
+    });
+
+    // Per-track reset
+    root.querySelectorAll('[data-reset]').forEach(btn => {
+      btn.addEventListener('click', async (e) => {
+        e.stopPropagation();
+        const id = btn.getAttribute('data-reset');
+        const tr = trackById(id);
+        await saveState(id, { done: new Array(tr.tasks.length).fill(false), notes: new Array(tr.tasks.length).fill('') });
+        render(); // rebuild; expanded set keeps this track open
+      });
+    });
+
+    // Personal to-dos: add + clear completed
+    const form = root.querySelector('#todo-form');
+    if (form) form.addEventListener('submit', (e) => { e.preventDefault(); addTodo(); });
+    const clr = root.querySelector('#todo-clear');
+    if (clr) clr.addEventListener('click', async () => {
+      todos = todos.filter(t => !t.done);
+      await saveTodos();
+      renderTodos();
+    });
+
+    // Data backup: export / import
+    const exportBtn = root.querySelector('#export-btn');
+    if (exportBtn) exportBtn.addEventListener('click', exportData);
+    const importBtn = root.querySelector('#import-btn');
+    const importFile = root.querySelector('#import-file');
+    if (importBtn && importFile) {
+      importBtn.addEventListener('click', () => importFile.click());
+      importFile.addEventListener('change', () => {
+        const file = importFile.files && importFile.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = () => { importData(reader.result); importFile.value = ''; };
+        reader.readAsText(file);
+      });
+    }
+
+    // Cloud sync
+    const syncBtn = root.querySelector('#sync-btn');
+    const syncPanel = root.querySelector('#sync-panel');
+    if (syncBtn && syncPanel) syncBtn.addEventListener('click', () => {
+      syncPanelOpen = !syncPanelOpen;
+      syncPanel.hidden = !syncPanelOpen;
+    });
+    const createBtn = root.querySelector('#sync-create');
+    if (createBtn) createBtn.addEventListener('click', async () => {
+      const tok = root.querySelector('#sync-token').value.trim() || sync.token;
+      if (!tok) { window.alert('Enter your GitHub token first.'); return; }
+      setSyncStatus('syncing');
+      try {
+        const id = await createGist(tok);
+        sync.token = tok; sync.gistId = id; sync.lastSynced = Date.now();
+        await saveSyncConfig();
+        const g = root.querySelector('#sync-gist'); if (g) g.value = id;
+        setSyncStatus('ok');
+        window.alert('Created a private sync gist. On your OTHER devices, paste this same Gist ID:\n\n' + id);
+      } catch (e) { setSyncStatus('error', e.message); window.alert('Could not create gist: ' + e.message + '\n(Check the token has the "gist" scope.)'); }
+    });
+    const connectBtn = root.querySelector('#sync-connect');
+    if (connectBtn) connectBtn.addEventListener('click', async () => {
+      const tok = root.querySelector('#sync-token').value.trim() || sync.token;
+      const gid = root.querySelector('#sync-gist').value.trim();
+      if (!tok || !gid) { window.alert('Enter both a GitHub token and a Gist ID (or click "Create gist").'); return; }
+      sync.token = tok; sync.gistId = gid;
+      await saveSyncConfig();
+      await pullFromGist();
+    });
+    const nowBtn = root.querySelector('#sync-now');
+    if (nowBtn) nowBtn.addEventListener('click', () => {
+      if (!syncEnabled()) { window.alert('Connect a token and Gist ID first.'); return; }
+      pushToGist();
+    });
+    const discBtn = root.querySelector('#sync-disconnect');
+    if (discBtn) discBtn.addEventListener('click', async () => {
+      sync = { token: '', gistId: '', lastSynced: 0, status: 'off', statusMsg: '' };
+      await saveSyncConfig();
+      render();
+    });
+
+    renderSyncStatus();
+  }
+
+  // ---- Personal to-dos ----
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  }
+
+  async function loadTodos() {
+    try {
+      const res = await storage.get('todos:general');
+      const arr = res ? JSON.parse(res.value) : null;
+      todos = Array.isArray(arr) ? arr : [];
+      todos.forEach(t => { if (!t.ts) t.ts = Date.now(); }); // backfill for grouping
+    } catch (e) { todos = []; }
+  }
+
+  async function saveTodos() {
+    try { await storage.set('todos:general', JSON.stringify(todos)); } catch (e) {}
+    if (!applyingRemote) scheduleSync();
+  }
+
+  async function addTodo() {
+    const input = root.querySelector('#todo-input');
+    if (!input) return;
+    const text = input.value.trim();
+    if (!text) return;
+    todos.push({ id: Date.now() + '-' + Math.random().toString(36).slice(2, 7), text, done: false, ts: Date.now() });
+    input.value = '';
+    input.focus();
+    await saveTodos();
+    renderTodos();
+  }
+
+  function dayInfo(ts) {
+    const d = new Date(ts);
+    const today = new Date();
+    const yest = new Date(); yest.setDate(today.getDate() - 1);
+    const sameDay = (a, b) => a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
+    let label;
+    if (sameDay(d, today)) label = 'Today';
+    else if (sameDay(d, yest)) label = 'Yesterday';
+    else label = d.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' });
+    return {
+      key: d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate(),
+      label,
+      isToday: sameDay(d, today),
+      sortVal: new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime(),
+    };
+  }
+
+  function todoItemHtml(t) {
+    return `
+      <div class="todo-item ${t.done ? 'done' : ''}" data-todo="${t.id}">
+        <input type="checkbox" ${t.done ? 'checked' : ''} data-todo-check="${t.id}">
+        <span class="txt">${esc(t.text)}</span>
+        <button class="todo-del" data-todo-del="${t.id}" title="Delete" aria-label="Delete task">×</button>
+      </div>`;
+  }
+
+  function renderTodos() {
+    const list = root.querySelector('#todo-list');
+    if (!list) return;
+    const open = todos.filter(t => !t.done).length;
+    const openEl = root.querySelector('#todo-open');
+    if (openEl) openEl.textContent = todos.length ? `${open} open · ${todos.length} total` : '0 open';
+    const clr = root.querySelector('#todo-clear');
+    if (clr) clr.style.display = todos.some(t => t.done) ? '' : 'none';
+
+    if (!todos.length) {
+      list.innerHTML = `<div class="todos-empty">Nothing here yet — add your first task above.</div>`;
+      return;
+    }
+    // Group by calendar day, newest day first; within a day, open items before done.
+    const groups = {};
+    todos.forEach(t => {
+      const info = dayInfo(t.ts);
+      (groups[info.key] = groups[info.key] || { info, items: [] }).items.push(t);
+    });
+    const orderedGroups = Object.values(groups).sort((a, b) => b.info.sortVal - a.info.sortVal);
+    orderedGroups.forEach(g => g.items.sort((a, b) => a.done === b.done ? a.ts - b.ts : (a.done ? 1 : -1)));
+
+    list.innerHTML = orderedGroups.map(g => {
+      const openInDay = g.items.filter(x => !x.done).length;
+      return `
+        <div class="todo-day">
+          <div class="todo-day-head ${g.info.isToday ? 'today' : ''}">${g.info.label}<span class="todo-day-cnt">${openInDay} open</span></div>
+          ${g.items.map(todoItemHtml).join('')}
+        </div>`;
+    }).join('');
+
+    list.querySelectorAll('[data-todo-check]').forEach(cb => {
+      cb.addEventListener('change', async () => {
+        const id = cb.getAttribute('data-todo-check');
+        const t = todos.find(x => String(x.id) === id);
+        if (t) { t.done = cb.checked; await saveTodos(); renderTodos(); }
+      });
+    });
+    list.querySelectorAll('[data-todo-del]').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const id = btn.getAttribute('data-todo-del');
+        todos = todos.filter(x => String(x.id) !== id);
+        await saveTodos();
+        renderTodos();
+      });
+    });
+  }
+
+  // ---- Backup: export / import all data ----
+  function exportData() {
+    const payload = {
+      app: 'ios-interview-roadmap',
+      version: 1,
+      exportedAt: new Date().toISOString(),
+      progress: state,   // { [trackId]: { done:[], notes:[] } }
+      todos: todos,
+    };
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `ios-prep-backup-${new Date().toISOString().slice(0, 10)}.json`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
+
+  // Write a { progress, todos } payload into local state (from an import file or a gist
+  // pull). Guarded so it never triggers a push back to the cloud.
+  async function applyPayload(data) {
+    applyingRemote = true;
+    try {
+      if (data.progress && typeof data.progress === 'object') {
+        for (const [id, blob] of Object.entries(data.progress)) {
+          if (blob && Array.isArray(blob.done)) {
+            await saveState(id, { done: blob.done, notes: Array.isArray(blob.notes) ? blob.notes : [] });
+          }
+        }
+      }
+      if (Array.isArray(data.todos)) {
+        todos = data.todos.map(t => ({
+          id: t.id || (Date.now() + '-' + Math.random().toString(36).slice(2, 7)),
+          text: String(t.text || ''),
+          done: !!t.done,
+          ts: t.ts || Date.now(),
+        }));
+        await saveTodos();
+      }
+    } finally {
+      applyingRemote = false;
+    }
+    render();
+  }
+
+  async function importData(text) {
+    let data;
+    try { data = JSON.parse(text); }
+    catch (e) { window.alert('Import failed: that file isn’t valid JSON.'); return; }
+    if (!data || typeof data !== 'object' || (!data.progress && !data.todos)) {
+      window.alert('Import failed: this doesn’t look like a roadmap backup file.');
+      return;
+    }
+    if (!window.confirm('Import will overwrite the progress, notes, and to-dos on THIS device with the backup’s contents. Continue?')) return;
+    await applyPayload(data);
+    window.alert('Import complete — your data has been restored on this device.');
+  }
+
+  // ---- Cloud sync (private GitHub Gist; token stays in this browser only) ----
+  function syncEnabled() { return !!(sync.token && sync.gistId); }
+
+  async function loadSyncConfig() {
+    try {
+      const res = await storage.get('sync:config');
+      const c = res ? JSON.parse(res.value) : null;
+      if (c && typeof c === 'object') sync = Object.assign(sync, { token: c.token || '', gistId: c.gistId || '', lastSynced: c.lastSynced || 0 });
+    } catch (e) {}
+    sync.status = syncEnabled() ? 'ok' : 'off';
+  }
+  async function saveSyncConfig() {
+    try { await storage.set('sync:config', JSON.stringify({ token: sync.token, gistId: sync.gistId, lastSynced: sync.lastSynced })); } catch (e) {}
+  }
+
+  function buildPayload() {
+    return { app: 'ios-interview-roadmap', version: 1, updatedAt: Date.now(), progress: state, todos: todos };
+  }
+  function ghHeaders(tok) {
+    return { 'Authorization': 'Bearer ' + (tok || sync.token), 'Accept': 'application/vnd.github+json', 'Content-Type': 'application/json' };
+  }
+  const GIST_FILE = 'roadmap-data.json';
+
+  function scheduleSync() {
+    if (!syncEnabled()) return;
+    clearTimeout(syncTimer);
+    syncTimer = setTimeout(() => { pushToGist(); }, 1500);
+  }
+
+  async function pullFromGist() {
+    if (!syncEnabled()) return;
+    setSyncStatus('syncing');
+    try {
+      const res = await fetch('https://api.github.com/gists/' + encodeURIComponent(sync.gistId), { headers: ghHeaders() });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const gist = await res.json();
+      const file = gist.files && gist.files[GIST_FILE];
+      if (file && file.content) {
+        let data = null;
+        try { data = JSON.parse(file.content); } catch (e) {}
+        if (data) await applyPayload(data);
+      }
+      sync.lastSynced = Date.now();
+      await saveSyncConfig();
+      setSyncStatus('ok');
+    } catch (e) { setSyncStatus('error', e.message); }
+  }
+
+  async function pushToGist() {
+    if (!syncEnabled()) return;
+    setSyncStatus('syncing');
+    try {
+      const payload = buildPayload();
+      const res = await fetch('https://api.github.com/gists/' + encodeURIComponent(sync.gistId), {
+        method: 'PATCH', headers: ghHeaders(),
+        body: JSON.stringify({ files: { [GIST_FILE]: { content: JSON.stringify(payload) } } }),
+      });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      sync.lastSynced = payload.updatedAt;
+      await saveSyncConfig();
+      setSyncStatus('ok');
+    } catch (e) { setSyncStatus('error', e.message); }
+  }
+
+  async function createGist(tok) {
+    const res = await fetch('https://api.github.com/gists', {
+      method: 'POST', headers: ghHeaders(tok),
+      body: JSON.stringify({ description: 'iOS Interview Prep Roadmap — sync data (do not share)', public: false, files: { [GIST_FILE]: { content: JSON.stringify(buildPayload()) } } }),
+    });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const gist = await res.json();
+    return gist.id;
+  }
+
+  function relTime(ts) {
+    if (!ts) return '';
+    const s = Math.round((Date.now() - ts) / 1000);
+    if (s < 60) return 'just now';
+    const m = Math.round(s / 60); if (m < 60) return m + 'm ago';
+    const h = Math.round(m / 60); if (h < 24) return h + 'h ago';
+    return Math.round(h / 24) + 'd ago';
+  }
+  function setSyncStatus(kind, msg) { sync.status = kind; sync.statusMsg = msg || ''; renderSyncStatus(); }
+  function renderSyncStatus() {
+    const el = root.querySelector('#sync-status');
+    if (!el) return;
+    if (!syncEnabled()) { el.textContent = 'Off'; el.className = 'sync-status off'; el.title = ''; return; }
+    if (sync.status === 'syncing') { el.textContent = 'Syncing…'; el.className = 'sync-status syncing'; el.title = ''; }
+    else if (sync.status === 'error') { el.textContent = 'Sync error'; el.className = 'sync-status error'; el.title = sync.statusMsg || ''; }
+    else { el.textContent = 'Synced ' + relTime(sync.lastSynced); el.className = 'sync-status ok'; el.title = ''; }
+  }
+
+  async function init() {
+    await loadSyncConfig();
+    await Promise.all([loadTodos(), ...allTracks().map(loadState)]);
+    render();
+    if (syncEnabled()) pullFromGist(); // download latest from the gist, then it renders
+  }
+
+  init();
+})();
+</script>
+</body>
+</html>
